@@ -1,7 +1,7 @@
 print("""\
 # *************************************************************************** #
 # *************************************************************************** #
-# TP6 : BASES DE GROEBNER ET SYSTEMES POLYNOMIAUX MULTIVARIES                 #
+# TP7 : APPLICATIONS CHOISIES DES BASES DE GROEBNER                           #
 # *************************************************************************** #
 # *************************************************************************** #
 """)
@@ -27,223 +27,211 @@ print("""\
 reset()
 print("""\
 # ****************************************************************************
-#  FONCTIONS DE SAGEMATH
+# POINTS SINGULIERS 
 # ****************************************************************************
 """)
 
 
 # Donnees de l'enonce de l'exercice
 
-MPol.<x,y,z> = PolynomialRing(QQ,3, order='lex')
-f = 2*x^2*y+7*z^3
+MPol.<x,y> = PolynomialRing(QQ,2)
+f = 5*x^4 - 10*x^3 + 10*x^2*y^2 - 40*x^2*y + 40*x^2 - 10*x*y^2 + 40*x*y - 32*x + 5*y^4 - 40*y^3 + 115*y^2 - 136*y + 48
 
 # Code pour l'EXERCICE
 
-print x<y^2
-print f.lt()
-print f.lc()
-print f.lm()
+PtsSinguliers = [(1,1)] # A calculer
 
-reponse  ="votre reponse ici"
 
 # # Affichage des resultats
 
-print "\n$1/ ", reponse
+print "La liste des points d'inflexions est :",PtsSinguliers
+G1 = implicit_plot(f,(x,-2,6),(y,-2,6),color='blue')
+G2 = points(PtsSinguliers,color='red')
+show(G1+G2)
 
 reset()
 print("""\
 # ****************************************************************************
-# DIVISION MULTIVARIEE
+#  VALUATIONS
 # ****************************************************************************
 """)
 
 
-
-
 # Donnees de l'enonce de l'exercice
 
-MPol.<x,y> = PolynomialRing(QQ,2, order='lex')
-f  = -x^7 + x^6*y + 2*x^5 - 2*x^4*y - 5*x^2 + 3*x*y^3 + 5*x*y + 11*y^3 + 10 
-f1 = x*y^2+2*y^2
-f2 = x^5+5
+A.<x,y,z> = AffineSpace(QQ, 3)
+QQ5.<rac5> = QuadraticField(5)
+f1 = x^2+y^2-1
+f2 = 5*x-(z-3)^2
+Z = Curve([f1,f2],A)
+n = z^2-6*z+5
+d = x^2-x+y^2
 
 # Code pour l'EXERCICE
 
-def myDivision(f,F):
-    MPol = f.parent()
-    n = MPol.ngens()
-    s = len(F)
-    Q = [MPol(0)]*s
-    r = f
-    assert(f==sum(q*g for q,g in zip(Q,F) )+r)
-    return Q,r
+var('theta')
+x(theta) = theta
+y(theta) = theta^2
+z(theta) = theta^3
+
+reponse2=""
+
+zeros = []
+poles = []
 
 # # Affichage des resultats
 
-print "\n$ ",  myDivision(f,[f1,f2])
+parametric_plot3d((x,y,z),(theta,0,2))  
 
-reset()
-print("""\
-# ****************************************************************************
-# BASE DE GROEBNER
-# ****************************************************************************
-""")
+print reponse2
+print "Confirmation de la lissité de la courbe : ", Z.is_smooth()
 
-# Donnees de l'enonce de l'exercice
-
-MPol.<x,y,z> = PolynomialRing(QQ,3, order='lex')
-f1 = x^2-y
-f2 = x*y-z
-f3 = z^4+x*y
-
-# Code pour l'EXERCICE
-
-def myGroebner(F):
-    return F
-    
-def myRedGroebner(F):
-    return F
-
-# # Affichage des resultats
-
-print "\n$1/ ",myGroebner([f1,f2,f3])
-print "\n$2/ ",myRedGroebner([f1,f2,f3])
-
-
+print "L'ensemble des zeros munis de leur multiplicité de h est",zeros
+print "L'ensemble des poles munis de leur multiplicité de h est",poles
 
 
 
 reset()
 print("""\
 # ****************************************************************************
-# APPARTENANCE A UN IDEAL
+#  ENVELOPPE
 # ****************************************************************************
 """)
 
 
 # Donnees de l'enonce de l'exercice
 
-MPol.<x,y,z> = PolynomialRing(QQ,3, order='lex')
-f1 = x*y-y^2
-f2 = x^3-z^2
-I = Ideal([f1,f2])
-f = -4*x^2*y^2*z^2 + y^6 + 3*z^5
+MPol.<x,y,t> = PolynomialRing(QQ,3) # ORDRE DES VARIABLES A FIXER
+f = (x-t)^2+(y+t^2-4*t)^2-4
 
 # Code pour l'EXERCICE
 
-test1 = f in I
-test2 = false  # A ECRIRE VOUS-MEME
+reponse1 = "La courbe (Ct) est un XXX(A COMPLETER) dont le XXX décrit un XXX quand t varie"
 
+eq_enveloppe = x+y
+f(x,y) = eq_enveloppe
+
+reponse4 = "Oui/Non"
 
 # # Affichage des resultats
 
-print "\n$ Test de Sage ",test1
-print "\n$ Test de personnel ",test2
+print reponse1
 
+print "L'enveloppe de la famille de courbe a pour equation",eq_enveloppe
+implicit_plot(f,(x,-5,5),(y,-5,5)) 
+
+print "La bille expulsée tape-t-elle le toit ?", reponse4
 
 reset()
 print("""\
 # ****************************************************************************
-# RESOLUTION D'UN SYSTEME
+#  COLORATION DE GRAPHES
 # ****************************************************************************
 """)
 
 
 # Donnees de l'enonce de l'exercice
 
+G= Graph(12)
+G.add_cycle(range(8))
+G.add_edges([(i,i+4) for i in range(4) ])
+G.add_edges([(8,5),(8,7),(9,0),(9,2),(10,1), (10,3),(11,4),(11,6) ])
+G.add_edges([(8,9),(9,10),(10,11)])
+G.show()
+G.coloring()
 
-MPol.<x,y> = PolynomialRing(QQ,2) # QUEL ORDRE DEVEZ-VOUS CHOISIR ?
-f = (y^2+6)*(x-1) - y*(x^2 + 1)
-g = (x^2+6)*(y-1) - x*(y^2 + 1)
- 
-
-# Code pour l'EXERCICE
-
-base = [] # Vous pouvez utiliser la fonction adhoc de sage
-          # pour calculer la base Groebner
-racines_y = [] # 
-racines  = [(0,0)]
-
-Gf = implicit_plot(f,(x,0,6),(y,0,6),color='red') 
-Gg = implicit_plot(g,(x,0,6),(y,0,6),color='blue')  
-Gp = point2d(racines,color='green')
-
-# # Affichage des resultats
-
-print "\n$1/  Une base de Groebner de [f,g] est", base
-print "\n$2/  Les valeurs de y sont", racines_y
-print "\n$4/  Les valeurs de (x,y) sont", racines
-print "\n$4/"; show(Gf+Gg+Gp)
-
-
-
-
-reset()
-print("""\
-# ****************************************************************************
-# OPTIMISATION
-# ****************************************************************************
-""")
-
-
-# Donnees de l'enonce de l'exercice
-
-
-MPol.<x,y,lamb> = PolynomialRing(QQ,3) # QUEL ORDRE DEVEZ-VOUS CHOISIR ?
-f = x^2*y  - 2*x*y + y + 1
-g = x^2 + y^2 - 1
-
+MPol = PolynomialRing(QQ,12,'x',
+order = 'invlex')
+phi (v) = v^3-1
+psi (u,v) = u^2+u*v+v^2
+IG= Ideal(MPol, [phi(MPol.gen(v)) for v in G.vertices()] + [psi(MPol.gen(u),MPol.gen(v)) for (u,v) in G.edges(labels=false)])
 
 # Code pour l'EXERCICE
 
-syst = []
+reponse1 = 0
 base = []
-racines = []
-
+reponse3 = "vos explications pour la question 3"
 
 # # Affichage des resultats
 
-
-print "\n$1/  On doit resoudre le systeme", syst
-print "\n$2/  dont une base de Groebner est", base
-print "\n$4/  Les valeurs de (x,y) sont", racines
-
-
-
-
+print "Il faut",reponse1,"couleurs pour colorer ce graphe"
+print "Une base de Groebner de I(G,3) est", base
+print reponse3
 
 reset()
 print("""\
 # ****************************************************************************
-# MANIPULATIONS ALGEBRIQUES
+#  PREUVE DE THEOREMES GEOMETRIQUES
 # ****************************************************************************
 """)
 
 
 # Donnees de l'enonce de l'exercice
 
+MPol.<x,y,u,v> = PolynomialRing(QQ,4)
+
+
 # Code pour l'EXERCICE
 
+IA = Ideal(MPol,[1])
+IB = Ideal(MPol,[1])
+IC = Ideal(MPol,[1])
+
+reponse2  = "votre reponse pour la question 2"
+
+reponse4 = "votre reponse pour la question 4"
 
 # # Affichage des resultats
 
-print "\n$1/ "
+print "Les idéaux IA, IB et IC sont", IA, IB, IC
+print reponse2
+print "detailler votre raisonnement pour la question 3"
+print reponse4
+
+
 
 reset()
 print("""\
 # ****************************************************************************
-# OVALES DE DESCARTES
+#  PROGRAMMATION ENTIERE
 # ****************************************************************************
 """)
 
 
 # Donnees de l'enonce de l'exercice
 
+MPol.<p,n,d,q> = PolynomialRing(QQ,4)
+I=Ideal([p^5-n,p^10-d,p^25-q])
 
 # Code pour l'EXERCICE
 
-eq = 0
+base = []
+reponse2 = "vos explications"
 
 # # Affichage des resultats
 
-print "\n$ L'équation est ",eq
+print "Base de Groebner",base
+print (p^117).reduce(I)
+print reponse2
+
+reset()
+print("""\
+# ****************************************************************************
+#  SURFACE DE CLEBSCH
+# ****************************************************************************
+""")
+
+
+# Donnees de l'enonce de l'exercice
+
+MPol.<x1,x2,x3> = PolynomialRing(QQ,3)
+f=x1^3+x2^3+x3^3+1-(x1+x2+x3+1)^3
+
+# Code pour l'EXERCICE
+
+
+# # Affichage des resultats
+
+implicit_plot3d(f,(x1,-5,5),(x2,-5,5),(x3,-5,5))
+
+
